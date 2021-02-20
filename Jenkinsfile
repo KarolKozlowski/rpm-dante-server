@@ -32,7 +32,7 @@ pipeline {
                     sh "cp ${dante_archive} ${dante_dir}/SOURCES"
                     dir(dante_dir) {
                         def build_directory = sh (script: 'pwd', returnStdout: true).trim()
-                        sh "rpmbuild  --define '_topdir ${build_directory}' --define '_extraflags ""' -ba SPECS/dante.spec"
+                        sh "rpmbuild  --define '_topdir ${build_directory}' --define '_extraflags #' -ba SPECS/dante.spec"
                     }
         
                 }
