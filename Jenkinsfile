@@ -33,7 +33,7 @@ pipeline {
                     def dante_dir = "dante-${dante_version}"
                     sh "cp ${dante_archive} ${dante_dir}/SOURCES"
                     dir(dante_dir) {
-                        sh "rpmbuild  --define '_topdir build' -bb SPECS/dante.spec"
+                        sh "rpmbuild  --define '_topdir .' -bb SPECS/dante.spec"
                     }
         
                 }
