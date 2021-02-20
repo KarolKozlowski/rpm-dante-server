@@ -14,7 +14,7 @@ pipeline {
                             url: "https://www.inet.no/dante/files/${dante_archive}",
                             outputFile: dante_archive
                     )
-                    sh 'tar -xf ${dante_archive}'
+                    sh "tar -xf ${dante_archive}"
                 }
             }
         }
