@@ -30,6 +30,11 @@ pipeline {
             steps {
                 script {
                     echo 'Build rpm...'
+                    def dante_dir = "dante-${dante_version}"
+                    sh "cp ${dante_archive} ${dante_dir}/SOURCES"
+                    dir(dante_dir) {
+                        sh 'rpmbuild -bb SPECS/dante.spec'
+                    }
         
                 }
             }
