@@ -1,5 +1,6 @@
 def dante_version = "1.4.2"
 def dante_archive = "dante-${dante_version}.tar.gz"
+def dante_dir = "dante-${dante_version}"
 
 pipeline {
     agent {
@@ -9,7 +10,7 @@ pipeline {
     stages {
         stage('Clean') {
             steps {
-                cleanWs()
+                sh 'rm -rf ${dante_dir}'
             }
         }
         stage('Fetch') {
@@ -28,7 +29,6 @@ pipeline {
             steps {
                 script {
                     echo 'Build rpm...'
-                    def dante_dir = "dante-${dante_version}"
                     sh "cp ${dante_archive} ${dante_dir}/SOURCES"
                     dir(dante_dir) {
                         def build_directory = sh (script: 'pwd', returnStdout: true).trim()
