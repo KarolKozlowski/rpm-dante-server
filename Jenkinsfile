@@ -9,9 +9,7 @@ pipeline {
     stages {
         stage('Clean') {
             steps {
-                script {
-                    sh "rm -rf ./dante-${dante_version}"
-                }
+                cleanWs()
             }
         }
         stage('Fetch') {
@@ -34,11 +32,7 @@ pipeline {
                     sh "cp ${dante_archive} ${dante_dir}/SOURCES"
                     dir(dante_dir) {
                         def build_directory = sh (script: 'pwd', returnStdout: true).trim()
-                        sh 'pwd'
-                        sh 'ls -la'
-                        echo "${build_directory}"
-                        echo "rpmbuild  --define '_topdir ${build_directory}' -bb SPECS/dante.spec"
-                        sh "rpmbuild  --define '_topdir ${build_directory}' -bb SPECS/dante.spec"
+                        sh "rpmbuild  --define '_topdir ${build_directory}' -ba SPECS/dante.spec"
                     }
         
                 }
