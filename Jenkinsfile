@@ -35,7 +35,9 @@ pipeline {
                     dir(dante_dir) {
                         sh 'pwd'
                         sh 'ls -la'
-                        sh "rpmbuild  --define '_topdir $(pwd)' -bb SPECS/dante.spec"
+                        echo "${pwd}"
+                        echo "rpmbuild  --define '_topdir ${pwd}' -bb SPECS/dante.spec"
+                        sh "rpmbuild  --define '_topdir ${pwd}' -bb SPECS/dante.spec"
                     }
         
                 }
