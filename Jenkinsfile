@@ -2,6 +2,11 @@ def dante_version = "1.4.2"
 def dante_archive = "dante-${dante_version}.tar.gz"
 def dante_dir = "dante-${dante_version}"
 
+def job_name = JOB_NAME.tokenize('/') as String[]
+def proj_name = job_name[1]
+
+RPM_GLOB = "**/RPMS/x86_64/*.rpm"
+
 pipeline {
     agent none
     stages {
@@ -36,8 +41,8 @@ pipeline {
                                 def build_directory = sh (script: 'pwd', returnStdout: true).trim()
                                 sh "env"
                                 sh "rpmbuild --define '%_hardening_ldflags -Wl,-z,now' --define '_topdir ${build_directory}' --define '_extraflags #' -ba SPECS/dante.spec"
-                                stash name: "rpms", includes: "**/RPMS/x86_64/*.rpm"
-                                archiveArtifacts artifacts: '**/RPMS/x86_64/*.rpm', fingerprint: true
+                                stash name: "rpms", includes: RPM_GLOB
+                                archiveArtifacts artifacts: RPM_GLOB, fingerprint: true
                             }
                 
                         }
@@ -47,7 +52,7 @@ pipeline {
         }
         stage('Release RPM') {
             agent {
-                label 'rhel8'
+                label 'yumrepo'
             }
             steps {
                 script {
@@ -55,11 +60,14 @@ pipeline {
                     dir(dante_dir) {
                         job_name = "${env.JOB_NAME}"
                         repo_base = "/srv/mirror/dotnot.pl"
-                        repo_dir = "${repo_base}/ci/${job_name}/"
+                        repo_dir = "${repo_base}/ci/${proj_name}/"
 
                         unstash name: "rpms"
                         sh "mkdir -p ${repo_dir}"
-                        fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: "**/RPMS/x86_64/*.rpm", targetLocation: "${repo_dir}")])
+                        def rpms = findFiles(glob: RPM_GLOB)
+                        rpms.each { item ->
+                            sh "cp ${item.path} ${repo_dir}"
+                        }
                         sh "createrepo ${repo_base}"
                     }
                 }
