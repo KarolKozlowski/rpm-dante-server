@@ -33,11 +33,16 @@ pipeline {
                     dir(dante_dir) {
                         def build_directory = sh (script: 'pwd', returnStdout: true).trim()
                         sh "env"
-                        sh "rpmbuild  --define '_topdir ${build_directory}' --define '_extraflags #' -ba SPECS/dante.spec"
+                        sh "rpmbuild --define '%_hardening_ldflags -Wl,-z,now' --define '_topdir ${build_directory}' --define '_extraflags #' -ba SPECS/dante.spec"
                     }
         
                 }
             }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: '**/RPMS/x86_64/*.rpm', fingerprint: true
         }
     }
 }
