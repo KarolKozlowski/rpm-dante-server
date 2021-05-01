@@ -1,4 +1,4 @@
-def dante_version = "1.4.2"
+def dante_version = "1.4.3"
 def dante_archive = "dante-${dante_version}.tar.gz"
 def dante_dir = "dante-${dante_version}"
 
