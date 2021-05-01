@@ -17,7 +17,7 @@ pipeline {
             stages {
                 stage('Clean') {
                     steps {
-                        sh 'rm -rf ${dante_dir}'
+                        sh 'git clean -fdx'
                     }
                 }
                 stage('Fetch') {
