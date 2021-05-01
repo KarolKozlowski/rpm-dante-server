@@ -36,6 +36,7 @@ pipeline {
                     steps {
                         script {
                             echo 'Build rpm...'
+                            sh "mkdir -p ${dante_dir}/SOURCES"
                             sh "cp ${dante_archive} ${dante_dir}/SOURCES"
                             dir(dante_dir) {
                                 def build_directory = sh (script: 'pwd', returnStdout: true).trim()
@@ -44,7 +45,6 @@ pipeline {
                                 stash name: "rpms", includes: RPM_GLOB
                                 archiveArtifacts artifacts: RPM_GLOB, fingerprint: true
                             }
-                
                         }
                     }
                 }
