@@ -18,6 +18,10 @@ jobs:
 
     - uses: docker://perconalab/rpmbuild:latest
 
+    - name: debug
+      run: "env; ls -la"
+      shell: bash
+
     - name: Build RPM package
       run: "rpmbuild --define '%_hardening_ldflags -Wl,-z,now' --define '_topdir .' --define '_extraflags #' -ba SPECS/dante.spec"
       shell: bash
