@@ -12,9 +12,6 @@ jobs:
     steps:
     - name: Build Dante (sockd) RPM
       run: |
-        pwd
-        ls -la
-        env
         mkdir SOURCES
         wget https://www.inet.no/dante/files/dante-${dante_version}.tar.gz -O SOURCES/dante-${dante_version}.tar.gz
         tar --strip-components=1 -xf SOURCES/dante-${dante_version}.tar.gz
@@ -22,8 +19,8 @@ jobs:
         rpmbuild --define '%_hardening_ldflags -Wl,-z,now' --define "_topdir $(pwd)" --define '_extraflags #' -ba SPECS/dante.spec
       shell: bash      
 
-    # - name: Upload artifact
-    #   uses: actions/upload-artifact@v1.0.0
-    #   with:
-    #     name: Binary RPM
-    #     path: ${{ steps.rpm.outputs.rpm_dir_path }}
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: Binary RPM
+        path: "**/RPMS/x86_64/*.rpm"
