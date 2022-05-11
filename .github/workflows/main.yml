@@ -16,13 +16,12 @@ jobs:
       shell: bash      
 
     - name: Extract Dante sources
-      run: tar -xf dante-${dante_version}.tar.gz
+      run: tar --strip-components=1 -xf dante-${dante_version}.tar.gz
       shell: bash      
 
     - name: build RPM package
       id: rpm
       uses: naveenrajm7/rpmbuild@master
-      working-directory: dante-${dante_version}
       with:
         spec_file: "SPECS/dante.spec"
 
