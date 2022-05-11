@@ -16,10 +16,14 @@ jobs:
       run: tar --strip-components=1 -xf dante-${dante_version}.tar.gz
       shell: bash      
 
+    - name: Move Dante sources
+      run: mv dante-${dante_version}.tar.gz ./SOURCES
+      shell: bash      
+
     - uses: docker://perconalab/rpmbuild:latest
 
     - name: debug
-      run: "env; ls -la"
+      run: "env; ls"
       shell: bash
 
     - name: Build RPM package
