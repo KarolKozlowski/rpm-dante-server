@@ -8,27 +8,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Download Dante sources
-      run: wget https://www.inet.no/dante/files/dante-${dante_version}.tar.gz -O dante-${dante_version}.tar.gz
-      shell: bash      
-
-    - name: Extract Dante sources
-      run: tar --strip-components=1 -xf dante-${dante_version}.tar.gz
-      shell: bash      
-
-    - name: Move Dante sources
-      run: mv dante-${dante_version}.tar.gz ./SOURCES
-      shell: bash      
-
     - uses: docker://perconalab/rpmbuild:latest
 
-    - name: debug
-      run: "env; ls"
-      shell: bash
-
-    - name: Build RPM package
-      run: "rpmbuild --define '%_hardening_ldflags -Wl,-z,now' --define '_topdir .' --define '_extraflags #' -ba SPECS/dante.spec"
-      shell: bash
+    - name: Download Dante sources
+      run: |
+        mkdir SOURCES
+        wget https://www.inet.no/dante/files/dante-${dante_version}.tar.gz -O SOURCES/dante-${dante_version}.tar.gz
+        tar --strip-components=1 -xf SOURCES/dante-${dante_version}.tar.gz
+        rpmbuild --define '%_hardening_ldflags -Wl,-z,now' --define "_topdir $(pwd)" --define '_extraflags #' -ba SPECS/dante.spec
+        env
+        ls -la
+      shell: bash      
+      # mv dante-${dante_version}.tar.gz ./SOURCES
 
     # - name: Upload artifact
     #   uses: actions/upload-artifact@v1.0.0
