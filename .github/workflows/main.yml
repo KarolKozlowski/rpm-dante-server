@@ -17,8 +17,6 @@ jobs:
         tar --strip-components=1 -xf SOURCES/dante-${dante_version}.tar.gz
         sudo yum install -y bison flex pam-devel
         rpmbuild --define '%_hardening_ldflags -Wl,-z,now' --define "_topdir $(pwd)" --define '_extraflags #' -ba SPECS/dante.spec
-        env
-        ls -la
       shell: bash      
       # mv dante-${dante_version}.tar.gz ./SOURCES
 
