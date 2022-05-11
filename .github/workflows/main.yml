@@ -6,9 +6,10 @@ jobs:
     env:
       dante_version: "1.4.3"
     runs-on: ubuntu-latest
-    container: perconalab/rpmbuild:latest
+    container: 
+      image: perconalab/rpmbuild:latest
+      options: --user root
     steps:
-
     - name: Build Dante (sockd) RPM
       run: |
         pwd
@@ -17,7 +18,7 @@ jobs:
         mkdir SOURCES
         wget https://www.inet.no/dante/files/dante-${dante_version}.tar.gz -O SOURCES/dante-${dante_version}.tar.gz
         tar --strip-components=1 -xf SOURCES/dante-${dante_version}.tar.gz
-        sudo /usr/bin/yum install -y bison flex pam-devel
+        /usr/bin/yum install -y bison flex pam-devel
         rpmbuild --define '%_hardening_ldflags -Wl,-z,now' --define "_topdir $(pwd)" --define '_extraflags #' -ba SPECS/dante.spec
       shell: bash      
 
