@@ -20,7 +20,7 @@ jobs:
       shell: bash      
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v3
       with:
         name: Binary RPM
-        path: "**/RPMS/x86_64/*.rpm"
+        path: RPMS/x86_64/*.rpm
