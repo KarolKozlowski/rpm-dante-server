@@ -9,8 +9,11 @@ jobs:
     container: perconalab/rpmbuild:latest
     steps:
 
-    - name: Download Dante sources
+    - name: Build Dante (sockd) RPM
       run: |
+        pwd
+        ls -la
+        env
         mkdir SOURCES
         wget https://www.inet.no/dante/files/dante-${dante_version}.tar.gz -O SOURCES/dante-${dante_version}.tar.gz
         tar --strip-components=1 -xf SOURCES/dante-${dante_version}.tar.gz
