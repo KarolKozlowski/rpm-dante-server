@@ -1,14 +1,13 @@
 name: RPM Build
 on: push
 
-env:
-  dante_version: "1.4.3"
-
 jobs:
   build:
+    env:
+      dante_version: "1.4.3"
     runs-on: ubuntu-latest
+    container: perconalab/rpmbuild:latest
     steps:
-    - uses: docker://perconalab/rpmbuild:latest
 
     - name: Download Dante sources
       run: |
@@ -18,7 +17,6 @@ jobs:
         sudo /usr/bin/yum install -y bison flex pam-devel
         rpmbuild --define '%_hardening_ldflags -Wl,-z,now' --define "_topdir $(pwd)" --define '_extraflags #' -ba SPECS/dante.spec
       shell: bash      
-      # mv dante-${dante_version}.tar.gz ./SOURCES
 
     # - name: Upload artifact
     #   uses: actions/upload-artifact@v1.0.0
