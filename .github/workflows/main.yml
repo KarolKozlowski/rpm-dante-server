@@ -4,13 +4,10 @@ on: push
 env:
   dante_version: "1.4.3"
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-
     - name: Download Dante sources
       run: wget https://www.inet.no/dante/files/dante-${dante_version}.tar.gz -O dante-${dante_version}.tar.gz
       shell: bash      
@@ -19,11 +16,11 @@ jobs:
       run: tar --strip-components=1 -xf dante-${dante_version}.tar.gz
       shell: bash      
 
-    - name: build RPM package
-      id: rpm
-      uses: naveenrajm7/rpmbuild@master
-      with:
-        spec_file: "SPECS/dante.spec"
+    - uses: docker://perconalab/rpmbuild:latest
+
+    - name: Build RPM package
+      run: "rpmbuild --define '%_hardening_ldflags -Wl,-z,now' --define '_topdir ${build_directory}' --define '_extraflags #' -ba SPECS/dante.spec"
+      shell: bash
 
     # - name: Upload artifact
     #   uses: actions/upload-artifact@v1.0.0
